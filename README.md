@@ -42,7 +42,7 @@ Leave `cloud_sql_proxy` running and open a new tab under Cloud Shell. Run the th
 ```bash
 gcloud auth login;
 gcloud config set project <REPLACE-WITH-PROJECT-ID>;
-cd edfi-google-cloud-deployment;
+cd edfi;
 bash edfi-ods/003-import-ods-data.sh <POSTGRES_PASSWORD>;
 ```
 
