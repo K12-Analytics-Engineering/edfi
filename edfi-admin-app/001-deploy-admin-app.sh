@@ -1,7 +1,7 @@
 gcloud builds submit --tag gcr.io/$1/edfi-admin-app edfi-admin-app/;
 
-gcloud beta secrets add-iam-policy-binding projects/$1/secrets/ods-password \
---member serviceAccount:admin-app-encryption-key@$1.iam.gserviceaccount.com \
+gcloud beta secrets add-iam-policy-binding projects/$1/secrets/admin-app-encryption-key \
+--member serviceAccount:edfi-cloud-run@$1.iam.gserviceaccount.com \
 --role roles/secretmanager.secretAccessor;
 
 gcloud beta run deploy edfi-admin-app \
