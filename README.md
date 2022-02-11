@@ -24,7 +24,7 @@ bash edfi-ods/001-init.sh;
 The second script will create a Cloud SQL instance as well as the empty ODS databases that you'll import data into later on.
 
 ```bash
-bash edfi-ods/002-create-cloud-sql.sh;
+bash edfi-ods/002-create-cloud-sql.sh $GOOGLE_CLOUD_PROJECT;
 ```
 
 Navigate to your newly created Cloud SQL [instance](https://console.cloud.google.com/sql/instances/edfi-ods-db/users) to set the password for the *postgres* user.
