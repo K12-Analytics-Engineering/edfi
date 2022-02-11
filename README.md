@@ -52,9 +52,18 @@ That's it for the ODS! You now have an Ed-Fi ODS created and your databases seed
 ### Create your Secret
 Navigate to [Secret Manager](https://console.cloud.google.com/security/secret-manager) under the *IAM & Admin* menu.
 
+#### Ed-Fi ODS postgres password
 * Create a new secret with the name `ods-password`
 * Enter your *postgres* user's password as the value
 * Click **Create Secret**
+
+#### Ed-Fi Admin App encryption key
+* Create a new secret with the name `admin-app-encryption-key`
+* Store the output of the command below
+
+```bash
+/usr/bin/openssl rand -base64 32
+```
 
 
 ## Ed-Fi API
