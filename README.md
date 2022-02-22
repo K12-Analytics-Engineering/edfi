@@ -43,7 +43,7 @@ Leave `cloud_sql_proxy` running and open a new tab under Cloud Shell. Run the th
 gcloud auth login;
 gcloud config set project <REPLACE-WITH-PROJECT-ID>;
 cd edfi;
-bash edfi-ods/003-import-ods-data.sh <POSTGRES_PASSWORD>;
+bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
 ```
 
 That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with data.
