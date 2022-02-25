@@ -17,6 +17,7 @@ gcloud config set project <REPLACE-WITH-PROJECT-ID>;
 The first script will enable the necessary Google APIs in the Cloud project, download ODS backup files, and unzip the downloaded files so they are ready to be imported once you have your Cloud SQL instance created.
 
 ```bash
+cd edfi;
 bash edfi-ods/001-init.sh;
 ```
 
