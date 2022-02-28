@@ -1,3 +1,10 @@
+gcloud services enable sqladmin.googleapis.com;
+gcloud services enable run.googleapis.com;
+gcloud services enable cloudbuild.googleapis.com;
+gcloud services enable compute.googleapis.com;
+gcloud services enable secretmanager.googleapis.com;
+gcloud services enable servicenetworking.googleapis.com;
+
 wget -O artifacts/edfi.database.admin.nupkg  https://pkgs.dev.azure.com/ed-fi-alliance/Ed-Fi-Alliance-OSS/_apis/packaging/feeds/EdFi/nuget/packages/EdFi.Database.Admin.PostgreSQL/versions/5.3.153/content;
 wget -O artifacts/edfi.database.security.nupkg https://pkgs.dev.azure.com/ed-fi-alliance/Ed-Fi-Alliance-OSS/_apis/packaging/feeds/EdFi/nuget/packages/EdFi.Database.Security.PostgreSQL/versions/5.3.151/content;
 
