@@ -24,14 +24,15 @@ gcloud config set project <walkthrough-project-id/>;
 
 Click the **Start** button to move to the next step.
 
-## Enable Google APIs
+## Initial setup
+### Enable Google APIs
 `gcloud` commands will be run in Google Cloud Shell to create various resources in your Google Cloud project. Click **Enable APIs** to enable the APIs listed.
 
 <walkthrough-enable-apis apis="sqladmin.googleapis.com,run.googleapis.com,cloudbuild.googleapis.com,compute.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com"></walkthrough-enable-apis>
 
 Click the **Next** button.
 
-## Download Ed-Fi artifacts
+### Download Ed-Fi artifacts
 Copy and run the command below. This will download the various files needed from Ed-Fi and store them in the `artifacts/` folder in the root of this folder.
 
 
