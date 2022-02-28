@@ -14,6 +14,8 @@ Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be seg
 
 If you created a project via the link above, be sure to also select it from the dropdown.
 
+## Configure Cloud Shell
+
 Run the command below to configure Cloud Shell to use the appropriate Google Cloud project.
 
 ```sh
