@@ -6,17 +6,19 @@ This tutorial will walk you through deploying the Ed-Fi API, ODS, and Admin App 
 
 Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be segmented by school year, but all accessible via the API.
 
+**Prerequisites**: A Cloud Billing account
+
 <walkthrough-tutorial-duration duration="45"></walkthrough-tutorial-duration>
 
 <walkthrough-project-setup billing="true" ></walkthrough-project-setup>
 
-**Prerequisites**: A Cloud Billing account
+If you created a project via the link above, be sure to also select it from the dropdown.
 
 ## Set Project ID
-Run the command below to configure Cloud Shell to use the appropriate Google Cloud project. Replace `<REPLACE-WITH-PROJECT-ID>` with <walkthrough-project-id/>.
+Run the command below to configure Cloud Shell to use the appropriate Google Cloud project.
 
 ```sh
-gcloud config set project <REPLACE-WITH-PROJECT-ID> <walkthrough-project-id/>;
+gcloud config set project <walkthrough-project-id/>;
 ```
 
 Click the **Start** button to move to the next step.
@@ -38,7 +40,10 @@ bash edfi-ods/001-init.sh;
 
 Click the **Next** button.
 
-## Create your Cloud SQL instance
+
+## Cloud SQL instance
+
+## Create instance
 You now need to create your Cloud SQL instance running PostgreSQL. This is the Ed-Fi ODS. After the Cloud SQL instance is created, this script will also create the following empty databases:
 
 * EdFi_Admin
@@ -48,8 +53,34 @@ You now need to create your Cloud SQL instance running PostgreSQL. This is the E
 * EdFi_Ods_2021
 
 ```sh
-bash edfi-ods/002-create-cloud-sql.sh $GOOGLE_CLOUD_PROJECT;
+bash edfi-ods/002-create-cloud-sql.sh <walkthrough-project-id/>;
 ```
 
-## Set postgres user password
+### Set postgres user password
 Now that your Cloud SQL instance has been created, you will need to set the password for the postgres user. Click [here](https://console.cloud.google.com/sql/instances/edfi-ods-db/users) and set the password for the *postgres* user.
+
+Click the **Next** button.
+
+
+## Import ODS data
+You are now going to seed your various PostgreSQL databases with the table structures required by Ed-Fi.
+
+### Proxy into instance
+Cloud SQL proxy is a command-line tool used to connect to a Cloud SQL instance. This tool creates an encrypted tunnel between your Cloud Shell environment and your Cloud SQL instance allowing you to connect to it and run various commands.
+
+```bash
+cloud_sql_proxy -instances=<walkthrough-project-id/>:us-central1:edfi-ods-db=tcp:5432;
+```
+
+The command above will stay open and continue running while we execute the next step. 
+
+<walkthrough-editor-spotlight spotlightId="menu-terminal-new-terminal">Open a new terminal</walkthrough-editor-spotlight> and run the third script to import the ODS data. You will be prompted for your *postgres* password at the start of each import.
+
+```sh
+gcloud config set project <walkthrough-project-id/>;
+bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
+```
+
+That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with data.
+
+Click the **Next** button to deploy your Ed-Fi API.
