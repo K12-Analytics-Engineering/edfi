@@ -34,7 +34,7 @@ Run the command below. This will enable the necessary Google Cloud APIs and down
 bash edfi-ods/001-init.sh;
 ```
 
-Click the **Next** button.
+After the command above has finished, click the **Next** button.
 
 
 ## Cloud SQL instance
@@ -52,10 +52,12 @@ Next up you will create a PostgreSQL Cloud SQL instance. This is the Ed-Fi ODS. 
 bash edfi-ods/002-create-cloud-sql.sh <walkthrough-project-id/>;
 ```
 
+After the command above has finished, move on to the next section.
+
 ### Set postgres user password
 Now that your Cloud SQL instance has been created, you will need to set the password for the postgres user. Click [here](https://console.cloud.google.com/sql/instances/edfi-ods-db/users) and set the password for the *postgres* user.
 
-Click the **Next** button.
+After you have set the `postgres` user's password, click the **Next** button.
 
 
 ## Import ODS data
@@ -79,6 +81,7 @@ bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
 That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with data.
 
 Click the **Next** button.
+
 
 ## Create your Secrets
 Your Ed-Fi API and Admin App will need to access two pieces of sensitive information: your `postgres` user's password and an encryption key specific to your Admin App deployment. Instead of storing these in plain text inside your respective configuration, we will use Google's Secret Manager. This is a great way to save sensitive information in an encrypted, secure manner.
