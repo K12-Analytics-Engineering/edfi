@@ -14,9 +14,6 @@ Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be seg
 
 If you created a project via the link above, be sure to also select it from the dropdown.
 
-<walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button>
-
-## Set Project ID
 Run the command below to configure Cloud Shell to use the appropriate Google Cloud project.
 
 ```sh
@@ -76,11 +73,7 @@ cloud_sql_proxy -instances=<walkthrough-project-id/>:us-central1:edfi-ods-db=tcp
 
 The command above will stay open and continue running while we execute the next step. 
 
-<walkthrough-editor-spotlight spotlightId="menu-terminal-new-terminal">Open a new terminal</walkthrough-editor-spotlight> and run the third script to import the ODS data. You will be prompted for your *postgres* password at the start of each import.
-
-```sh
-gcloud config set project <walkthrough-project-id/>;
-```
+Click <walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button> to open a new terminal. Run the command below to import the ODS data. You should replace `<POSTGRES_PASSWORD>` with your actual `postgres` user password.
 
 ```sh
 bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
@@ -89,3 +82,53 @@ bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
 That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with data.
 
 Click the **Next** button to deploy your Ed-Fi API.
+
+## Create your Secrets
+Your Ed-Fi API and Admin App will need to access two pieces of sensitive information: your `postgres` user's password and an encryption key specific to your Admin App deployment. Instead of storing these in plain text inside your respective configuration, we will use Google's Secret Manager. This is a great way to save sensitive information in an encrypted, secure manner.
+
+Navigate to [Secret Manager](https://console.cloud.google.com/security/secret-manager) under the *IAM & Admin* menu. Complete the steps below to create two new secrets.
+
+### Ed-Fi ODS postgres password
+
+* Create a new secret with the name `ods-password`
+* Enter your *postgres* user's password as the value
+* Click **Create Secret**
+
+### Ed-Fi Admin App encryption key
+
+* Create a new secret with the name `admin-app-encryption-key`
+* Store the output of the command below
+
+```sh
+/usr/bin/openssl rand -base64 32
+```
+
+Once you have your two new secrets created, click the **Next** button.
+
+
+## Ed-Fi API
+Time to deploy the API on Google Cloud Run. Running the command below will build a Docker image using this <walkthrough-editor-open-file filePath="edfi-api/appsettings.template.json">Ed-Fi API config</walkthrough-editor-open-file> and push the image to your Google Cloud Container Registry. After that, a Cloud Run service will be deployed using that new image.
+
+```sh
+bash edfi-api/001-deploy-api.sh <walkthrough-project-id/>;
+```
+
+After the Cloud Run service has been deployed, the terminal will print out the HTTPS URL for your Ed-Fi API. Test the API by navigating to this URL.
+
+Click the **Next** button.
+
+## Ed-Fi Admin App
+The final step is to deploy Ed-Fi's Admin App as an additional Google Cloud Run service. Run the command below replacing `<CLOUD_RUN_EDFI_API_URL>` with the Ed-Fi API generated via the previous step.
+
+```sh
+bash edfi-admin-app/001-deploy-admin-app.sh <walkthrough-project-id/> <CLOUD_RUN_EDFI_API_URL>;
+```
+
+After the Cloud Run service has been deployed, the terminal will print out the HTTPS URL for your Admin App deployment. Navigate to the URL to create an admin account.
+
+Click the **Next** button.
+
+## Congratulations!
+That is it! You have successfully deployed Ed-Fi on Google Cloud.
+
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
