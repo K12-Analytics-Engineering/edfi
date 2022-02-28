@@ -44,7 +44,7 @@ Click the **Next** button.
 ## Cloud SQL instance
 
 ### Create instance
-You now need to create your Cloud SQL instance running PostgreSQL. This is the Ed-Fi ODS. After the Cloud SQL instance is created, this script will also create the following empty databases:
+Next up you will create a PostgreSQL Cloud SQL instance. This is the Ed-Fi ODS. After the Cloud SQL instance is created, this script will also create the following empty databases:
 
 * EdFi_Admin
 * EdFi_Security
