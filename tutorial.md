@@ -13,10 +13,10 @@ Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be seg
 **Prerequisites**: A Cloud Billing account
 
 ## Set Project ID
-Run the command below to configure Cloud Shell to use the appropriate Google Cloud project. Replace `<REPLACE-WITH-PROJECT-ID>` with your actual Google Cloud project ID.
+Run the command below to configure Cloud Shell to use the appropriate Google Cloud project. Replace `<REPLACE-WITH-PROJECT-ID>` with <walkthrough-project-id/>.
 
 ```sh
-gcloud config set project <REPLACE-WITH-PROJECT-ID>;
+gcloud config set project <REPLACE-WITH-PROJECT-ID> <walkthrough-project-id/>;
 ```
 
 Click the **Start** button to move to the next step.
