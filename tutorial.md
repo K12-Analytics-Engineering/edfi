@@ -30,8 +30,6 @@ Click the **Start** button to move to the next step.
 
 <walkthrough-enable-apis apis="sqladmin.googleapis.com,run.googleapis.com,cloudbuild.googleapis.com,compute.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com"></walkthrough-enable-apis>
 
-Click the **Next** button.
-
 ### Download Ed-Fi artifacts
 Copy and run the command below. This will download the various files needed from Ed-Fi and store them in the `artifacts/` folder in the root of this folder.
 
@@ -84,7 +82,7 @@ bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
 
 That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with data.
 
-Click the **Next** button to deploy your Ed-Fi API.
+Click the **Next** button.
 
 ## Create your Secrets
 Your Ed-Fi API and Admin App will need to access two pieces of sensitive information: your `postgres` user's password and an encryption key specific to your Admin App deployment. Instead of storing these in plain text inside your respective configuration, we will use Google's Secret Manager. This is a great way to save sensitive information in an encrypted, secure manner.
