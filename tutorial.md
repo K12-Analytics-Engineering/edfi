@@ -14,6 +14,8 @@ Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be seg
 
 If you created a project via the link above, be sure to also select it from the dropdown.
 
+<walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button>
+
 ## Set Project ID
 Run the command below to configure Cloud Shell to use the appropriate Google Cloud project.
 
@@ -43,7 +45,7 @@ Click the **Next** button.
 
 ## Cloud SQL instance
 
-## Create instance
+### Create instance
 You now need to create your Cloud SQL instance running PostgreSQL. This is the Ed-Fi ODS. After the Cloud SQL instance is created, this script will also create the following empty databases:
 
 * EdFi_Admin
@@ -78,6 +80,9 @@ The command above will stay open and continue running while we execute the next 
 
 ```sh
 gcloud config set project <walkthrough-project-id/>;
+```
+
+```sh
 bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
 ```
 
