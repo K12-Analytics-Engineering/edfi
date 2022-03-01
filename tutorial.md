@@ -11,7 +11,7 @@ Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be seg
 
 **Prerequisites**: A Cloud Billing account
 
-<walkthrough-tutorial-duration duration="45"></walkthrough-tutorial-duration>
+<walkthrough-tutorial-duration duration="60"></walkthrough-tutorial-duration>
 
 <walkthrough-project-setup billing="true"></walkthrough-project-setup>
 
