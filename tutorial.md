@@ -82,22 +82,26 @@ Click the button below and navigate to your Cloud SQL instance.
 You Cloud SQL instance has finished being created when you see a green check mark next to it.
 
 ### Create databases
-After your Cloud SQL instance has been created, you can create the necessary ODS databases listed below.
-
-* `EdFi_Admin`
-* `EdFi_Security`
-* `EdFi_Ods_2023`
-* `EdFi_Ods_2022`
-* `EdFi_Ods_2021`
-
-Run the commands below:
+After your Cloud SQL instance has been created, time to create the necessary databases.
 
 ```sh
-gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db & \
-gcloud sql databases create 'EdFi_Security' --instance=edfi-ods-db & \
-gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db & \
-gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db & \
-gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db
+gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db;
+```
+
+```sh
+gcloud sql databases create 'EdFi_Security' --instance=edfi-ods-db;
+```
+
+```sh
+gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db;
+```
+
+```sh
+gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db;
+```
+
+```sh
+gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db;
 ```
 
 ### Set postgres user password
