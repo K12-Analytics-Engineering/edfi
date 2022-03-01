@@ -75,11 +75,11 @@ gcloud beta sql instances create \
     --backup-start-time 08:00 edfi-ods-db;
 ```
 
-To see your Cloud SQL instance, click the [menu][spotlight-console-menu] on the left side of the console.
-
-Then, select the **SQL** section.
+Click the button below and navigate to your Cloud SQL instance.
 
 <walkthrough-menu-navigation sectionId="SQL_SECTION"></walkthrough-menu-navigation>
+
+You Cloud SQL instance has finished being created when you see a green check mark next to it.
 
 ### Create databases
 After your Cloud SQL instance has been created, you can create the necessary ODS databases listed below.
@@ -90,15 +90,15 @@ After your Cloud SQL instance has been created, you can create the necessary ODS
 * `EdFi_Ods_2022`
 * `EdFi_Ods_2021`
 
+Run the commands below:
+
 ```sh
-gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db &
-gcloud sql databases create 'EdFi_Security' --instance=edfi-ods-db &
-gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db &
-gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db &
+gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db;
+gcloud sql databases create 'EdFi_Security' --instance=edfi-ods-db;
+gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db;
+gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db;
 gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db;
 ```
-
-After the command above has finished, move on to the next section.
 
 ### Set postgres user password
 Now that your Cloud SQL instance has been created, you will need to set the password for the postgres user. Click [here](https://console.cloud.google.com/sql/instances/edfi-ods-db/users) and set the password for the *postgres* user.
