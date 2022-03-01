@@ -105,7 +105,11 @@ gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db;
 ```
 
 ### Set postgres user password
-Now that your Cloud SQL instance has been created, you will need to set the password for the postgres user. Click [here](https://console.cloud.google.com/sql/instances/edfi-ods-db/users) and set the password for the *postgres* user.
+Now that your Cloud SQL instance has been created, you will need to set the password for the postgres user.
+
+* Click on **edfi-ods-db**
+* Click on **Users**
+* Click on the three-dot menu and set the password for the *postgres* user
 
 After you have set the `postgres` user's password, click the **Next** button.
 
@@ -116,13 +120,13 @@ You are now going to seed your various PostgreSQL databases with the table struc
 ### Proxy into instance
 Cloud SQL proxy is a command-line tool used to connect to a Cloud SQL instance. This tool creates an encrypted tunnel between your Cloud Shell environment and your Cloud SQL instance allowing you to connect to it and run various commands.
 
+Click <walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button> to open a new terminal. In the new terminal, run the command below to start Cloud SQL proxy.
+
 ```bash
 cloud_sql_proxy -instances=<walkthrough-project-id/>:us-central1:edfi-ods-db=tcp:5432;
 ```
 
-The command above will stay open and continue running while we execute the next step. 
-
-Click <walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button> to open a new terminal. Run the command below to import the ODS data. You should replace `<POSTGRES_PASSWORD>` with your actual `postgres` user password.
+Navigate back to the left terminal and run the command below to import the ODS data. You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
 
 ```sh
 bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
