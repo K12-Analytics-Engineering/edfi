@@ -189,6 +189,10 @@ Time to deploy the API on Google Cloud Run. Running the command below will build
 bash edfi-api/001-deploy-api.sh <walkthrough-project-id/>;
 ```
 
+Click the button below and navigate to Cloud Run.
+
+<walkthrough-menu-navigation sectionId="CLOUD_RUN_SECTION"></walkthrough-menu-navigation>
+
 After the Cloud Run service has been deployed, the terminal will print out the HTTPS URL for your Ed-Fi API. Test the API by navigating to this URL.
 
 Click the **Next** button.
