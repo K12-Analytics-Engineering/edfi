@@ -25,7 +25,7 @@ gcloud config set project <walkthrough-project-id/>;
 Click the **Start** button to move to the next step.
 
 ## Initial setup
-`gcloud` commands will be run in Google Cloud Shell to create various resources in your Google Cloud project. To do so, the Google Cloud APIs need to be enabled.
+`gcloud` commands will be run in Google Cloud Shell to create various resources in your Google Cloud project. To do so, the Google Cloud APIs below need to be enabled.
 
 <walkthrough-enable-apis apis="sqladmin.googleapis.com,run.googleapis.com,cloudbuild.googleapis.com,compute.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com"></walkthrough-enable-apis>
 
@@ -41,8 +41,8 @@ After the command above has finished, click the **Next** button.
 ## Cloud SQL instance
 Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-Fi ODS.
 
-### Create private services access connection
-For added security, your Cloud SQL instance will internal, private IP address. To do so, you need to create a private services access connection. This connection enables your services to communicate exclusively by using internal IP addresses.
+### Create a private services access connection
+For added security, your Cloud SQL instance will have an internal, private IP address. To do so, you need to create a private services access connection. This connection enables your services to communicate exclusively by using internal IP addresses.
 
 ```sh
 gcloud compute addresses create google-managed-services-default \
@@ -75,14 +75,20 @@ gcloud beta sql instances create \
     --backup-start-time 08:00 edfi-ods-db;
 ```
 
+To see your Cloud SQL instance, click the [menu][spotlight-console-menu] on the left side of the console.
+
+Then, select the **SQL** section.
+
+<walkthrough-menu-navigation sectionId="SQL_SECTION"></walkthrough-menu-navigation>
+
 ### Create databases
 After your Cloud SQL instance has been created, you can create the necessary ODS databases listed below.
 
-* EdFi_Admin
-* EdFi_Security
-* EdFi_Ods_2023
-* EdFi_Ods_2022
-* EdFi_Ods_2021
+* `EdFi_Admin`
+* `EdFi_Security`
+* `EdFi_Ods_2023`
+* `EdFi_Ods_2022`
+* `EdFi_Ods_2021`
 
 ```sh
 gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db &
