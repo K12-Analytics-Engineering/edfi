@@ -93,11 +93,11 @@ After your Cloud SQL instance has been created, you can create the necessary ODS
 Run the commands below:
 
 ```sh
-gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db;
-gcloud sql databases create 'EdFi_Security' --instance=edfi-ods-db;
-gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db;
-gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db;
-gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db;
+gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db & \
+gcloud sql databases create 'EdFi_Security' --instance=edfi-ods-db & \
+gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db & \
+gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db & \
+gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db
 ```
 
 ### Set postgres user password
