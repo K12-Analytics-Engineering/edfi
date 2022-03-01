@@ -140,21 +140,13 @@ Click the **Next** button.
 ## Create your Secrets
 Your Ed-Fi API and Admin App will need to access two pieces of sensitive information: your `postgres` user's password and an encryption key specific to your Admin App deployment. Instead of storing these in plain text inside your respective configuration, we will use Google's Secret Manager. This is a great way to save sensitive information in an encrypted, secure manner.
 
-Navigate to [Secret Manager](https://console.cloud.google.com/security/secret-manager) under the *IAM & Admin* menu. Complete the steps below to create two new secrets.
-
-### Ed-Fi ODS postgres password
-
-* Create a new secret with the name `ods-password`
-* Enter your *postgres* user's password as the value
-* Click **Create Secret**
-
-### Ed-Fi Admin App encryption key
-
-* Create a new secret with the name `admin-app-encryption-key`
-* Store the output of the command below
+Navigate to [Secret Manager](/security/secret-manager) under
 
 ```sh
-/usr/bin/openssl rand -base64 32
+echo -n "<POSTGRES_PASSWORD>" | gcloud secrets create ods-password --data-file=-
+
+```sh
+echo -n $(/usr/bin/openssl rand -base64 32) | gcloud secrets create admin-app-encryption-key --data-file=-
 ```
 
 Once you have your two new secrets created, click the **Next** button.

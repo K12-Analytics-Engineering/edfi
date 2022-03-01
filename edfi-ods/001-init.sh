@@ -13,4 +13,3 @@ unzip artifacts/EdFi.Suite3.Ods.Minimal.Template.nupkg -d artifacts/edfi-ods-min
 
 unzip artifacts/EdFi.Suite3.ODS.AdminApp.Database.nupkg -d artifacts/ed-fi-ods-admin-scripts;
 
-gcloud iam service-accounts create edfi-cloud-run;
