@@ -10,7 +10,7 @@ Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be seg
 
 <walkthrough-tutorial-duration duration="45"></walkthrough-tutorial-duration>
 
-<walkthrough-project-setup billing="true" ></walkthrough-project-setup>
+<walkthrough-project-billing-setup></walkthrough-project-billing-setup>
 
 If you created a project via the link above, be sure to also select it from the dropdown.
 
