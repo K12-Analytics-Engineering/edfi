@@ -79,7 +79,7 @@ Click the button below and navigate to your Cloud SQL instance.
 
 <walkthrough-menu-navigation sectionId="SQL_SECTION"></walkthrough-menu-navigation>
 
-You Cloud SQL instance has finished being created when you see a green check mark next to it.
+Your Cloud SQL instance has finished being created when you see a green check mark next to it.
 
 ### Create databases
 After your Cloud SQL instance has been created, time to create the necessary databases.
@@ -132,7 +132,7 @@ Navigate back to the left terminal and run the command below to import the ODS d
 bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
 ```
 
-That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with data.
+That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with Ed-Fi's table structure.
 
 Click the **Next** button.
 
@@ -209,6 +209,6 @@ After the Cloud Run service has been deployed, the terminal will print out the H
 Click the **Next** button.
 
 ## Congratulations!
-That is it! You have successfully deployed Ed-Fi on Google Cloud.
+You have successfully deployed Ed-Fi on Google Cloud.
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
