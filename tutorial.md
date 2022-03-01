@@ -2,7 +2,7 @@
 
 ![Ed-Fi](https://www.ed-fi.org/assets/2019/07/Ed-FiLogo-2.png)
 
-This tutorial will walk you through deploying the Ed-Fi API, ODS, and Admin App in Google Cloud. Cloud SQL will be used for the ODS, and Cloud Run will be used for the API and Admin App.
+In this tutorial you will deploy the Ed-Fi API, ODS, and Admin App. Cloud SQL will be used for the ODS, and Cloud Run will be used for the API and Admin App.
 
 Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be segmented by school year, but all accessible via the API.
 
@@ -10,7 +10,7 @@ Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be seg
 
 <walkthrough-tutorial-duration duration="45"></walkthrough-tutorial-duration>
 
-<walkthrough-project-billing-setup></walkthrough-project-billing-setup>
+<walkthrough-project-setup billing="true"></walkthrough-project-setup>
 
 If you created a project via the link above, be sure to also select it from the dropdown.
 
@@ -25,10 +25,11 @@ gcloud config set project <walkthrough-project-id/>;
 Click the **Start** button to move to the next step.
 
 ## Initial setup
-`gcloud` commands will be run in Google Cloud Shell to create various resources in your Google Cloud project.
+`gcloud` commands will be run in Google Cloud Shell to create various resources in your Google Cloud project. To do so, the Google Cloud APIs need to be enabled.
 
-Run the command below. This will enable the necessary Google Cloud APIs and download the various files needed from Ed-Fi.
+<walkthrough-enable-apis apis="sqladmin.googleapis.com,run.googleapis.com,cloudbuild.googleapis.com,compute.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com"></walkthrough-enable-apis>
 
+Run the command below. This will download the various files needed from Ed-Fi.
 
 ```sh
 bash edfi-ods/001-init.sh;
@@ -38,9 +39,44 @@ After the command above has finished, click the **Next** button.
 
 
 ## Cloud SQL instance
+Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-Fi ODS.
+
+### Create private services access connection
+For added security, your Cloud SQL instance will internal, private IP address. To do so, you need to create a private services access connection. This connection enables your services to communicate exclusively by using internal IP addresses.
+
+```sh
+gcloud compute addresses create google-managed-services-default \
+    --global \
+    --purpose=VPC_PEERING \
+    --prefix-length=16 \
+    --description="peering range" \
+    --network=default;
+```
+
+```sh
+gcloud services vpc-peerings connect \
+    --service=servicenetworking.googleapis.com \
+    --ranges=google-managed-services-default \
+    --network=default \
+    --project=<walkthrough-project-id/>;
+```
 
 ### Create instance
-Next up you will create a PostgreSQL Cloud SQL instance. This is the Ed-Fi ODS. After the Cloud SQL instance is created, this script will also create the following empty databases:
+Now that you have a private services access connection, you can create your Cloud SQL instance.
+
+```sh
+gcloud beta sql instances create \
+    --zone us-central1-c \
+    --database-version POSTGRES_11 \
+    --memory 7680MiB \
+    --cpu 2 \
+    --storage-auto-increase \
+    --network=projects/<walkthrough-project-id/>/global/networks/default \
+    --backup-start-time 08:00 edfi-ods-db;
+```
+
+### Create databases
+After your Cloud SQL instance has been created, you can create the necessary ODS databases listed below.
 
 * EdFi_Admin
 * EdFi_Security
@@ -49,7 +85,11 @@ Next up you will create a PostgreSQL Cloud SQL instance. This is the Ed-Fi ODS. 
 * EdFi_Ods_2021
 
 ```sh
-bash edfi-ods/002-create-cloud-sql.sh <walkthrough-project-id/>;
+gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db &
+gcloud sql databases create 'EdFi_Security' --instance=edfi-ods-db &
+gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db &
+gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db &
+gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db;
 ```
 
 After the command above has finished, move on to the next section.
@@ -107,6 +147,11 @@ Once you have your two new secrets created, click the **Next** button.
 
 
 ## Ed-Fi API
+
+```sh
+gcloud iam service-accounts create edfi-cloud-run;
+```
+
 Time to deploy the API on Google Cloud Run. Running the command below will build a Docker image using this <walkthrough-editor-open-file filePath="edfi-api/appsettings.template.json">Ed-Fi API config</walkthrough-editor-open-file> and push the image to your Google Cloud Container Registry. After that, a Cloud Run service will be deployed using that new image.
 
 ```sh
