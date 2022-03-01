@@ -152,14 +152,38 @@ echo -n $(/usr/bin/openssl rand -base64 32) | gcloud secrets create admin-app-en
 
 Once you have your two new secrets created, click the **Next** button.
 
+## Service account
+Your Ed-Fi API and Admin App will run via Cloud Run. Those services will run under a service account that has access to your Cloud SQL instance and recently created secrets.
 
-## Ed-Fi API
+Run the commands below to create your service account and grant it access to the appropriate services.
 
 ```sh
 gcloud iam service-accounts create edfi-cloud-run;
 ```
 
-Time to deploy the API on Google Cloud Run. Running the command below will build a Docker image using this <walkthrough-editor-open-file filePath="edfi-api/appsettings.template.json">Ed-Fi API config</walkthrough-editor-open-file> and push the image to your Google Cloud Container Registry. After that, a Cloud Run service will be deployed using that new image.
+```sh
+gcloud projects add-iam-policy-binding <walkthrough-project-id/> \
+    --member="serviceAccount:edfi-cloud-run@<walkthrough-project-id/>.iam.gserviceaccount.com" \
+    --role=roles/cloudsql.client;
+```
+
+```sh
+gcloud beta secrets add-iam-policy-binding projects/<walkthrough-project-id/>/secrets/ods-password \
+--member serviceAccount:edfi-cloud-run@<walkthrough-project-id/>.iam.gserviceaccount.com \
+--role roles/secretmanager.secretAccessor;
+```
+
+```sh
+gcloud beta secrets add-iam-policy-binding projects/<walkthrough-project-id/>/secrets/admin-app-encryption-key \
+--member serviceAccount:edfi-cloud-run@<walkthrough-project-id/>.iam.gserviceaccount.com \
+--role roles/secretmanager.secretAccessor;
+```
+
+Click the **Next** button.
+
+
+## Ed-Fi API
+Time to deploy the API on Google Cloud Run. Running the command below will build a Docker image and push the image to your Google Cloud Container Registry. After that, a Cloud Run service will be deployed using that new image.
 
 ```sh
 bash edfi-api/001-deploy-api.sh <walkthrough-project-id/>;
