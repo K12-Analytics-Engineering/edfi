@@ -2,9 +2,12 @@
 
 ![Ed-Fi](https://www.ed-fi.org/assets/2019/07/Ed-FiLogo-2.png)
 
-In this tutorial you will deploy the Ed-Fi API, ODS, and Admin App. Cloud SQL will be used for the ODS, and Cloud Run will be used for the API and Admin App.
+In this tutorial you will deploy Ed-Fi. This includes:
+* Ed-Fi API and ODS Suite 3 v5.3
+* Ed-Fi Admin App v2.3.2
+* TPDM Core v1.1.1
 
-Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be segmented by school year, but all accessible via the API.
+Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be segmented by school year, but all accessible via the API. Your ODS will be PostgreSQL v11.
 
 **Prerequisites**: A Cloud Billing account
 
@@ -133,6 +136,11 @@ bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
 ```
 
 That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with Ed-Fi's table structure.
+
+Your Cloud SQL instance was created with both a private and public ip address. The public IP was needed for the import job you just ran. Before moving on to the next step, disable the public ip by running the command below:
+```sh
+gcloud sql instances patch edfi-ods-db --no-assign-ip;
+```
 
 Click the **Next** button.
 
