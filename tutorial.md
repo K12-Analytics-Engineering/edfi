@@ -156,14 +156,12 @@ Your Ed-Fi API and Admin App will need to access two pieces of sensitive informa
 
 ### Ed-Fi ODS password
 Run the command below. You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
-
 ```sh
 echo -n "<POSTGRES_PASSWORD>" | gcloud secrets create ods-password --data-file=-
 ```
 
 ### Admin App encryption key
 Run the command below. 
-
 ```sh
 echo -n $(/usr/bin/openssl rand -base64 32) | gcloud secrets create admin-app-encryption-key --data-file=-
 ```
@@ -204,6 +202,9 @@ Click the **Next** button.
 
 
 ## Ed-Fi API
+
+![Cloud Run](https://cloud-dot-devsite-v2-prod.appspot.com/walkthroughs/images/run.png)
+
 Time to deploy the API on Google Cloud Run. Running the command below will build a Docker image and push the image to your Google Cloud Container Registry. After that, a Cloud Run service will be deployed using that new image.
 
 ```sh
@@ -219,6 +220,9 @@ Your Cloud Run service has finished being created when you see a green check mar
 Click the **Next** button.
 
 ## Ed-Fi Admin App
+
+![Cloud Run](https://cloud-dot-devsite-v2-prod.appspot.com/walkthroughs/images/run.png)
+
 The final step is to deploy Ed-Fi's Admin App as an additional Google Cloud Run service. Run the command below replacing *`<CLOUD_RUN_EDFI_API_URL>`* with the Ed-Fi API generated via the previous step.
 
 ```sh
