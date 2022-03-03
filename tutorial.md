@@ -114,7 +114,7 @@ gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db;
 gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db;
 ```
 
-### Set postgres user password
+### Set your postgres user password
 Now that your Cloud SQL instance has been created, you will need to set the password for the postgres user.
 
 * Click on **edfi-ods-db**
@@ -154,11 +154,15 @@ Click the **Next** button.
 ## Create your Secrets
 Your Ed-Fi API and Admin App will need to access two pieces of sensitive information: your `postgres` user's password and an encryption key specific to your Admin App deployment. Instead of storing these in plain text inside your respective configuration, we will use Google's Secret Manager. This is a great way to save sensitive information in an encrypted, secure manner.
 
-You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
+### Ed-Fi ODS password
+Run the command below. You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
 
 ```sh
 echo -n "<POSTGRES_PASSWORD>" | gcloud secrets create ods-password --data-file=-
 ```
+
+### Admin App encryption key
+Run the command below. 
 
 ```sh
 echo -n $(/usr/bin/openssl rand -base64 32) | gcloud secrets create admin-app-encryption-key --data-file=-
