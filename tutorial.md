@@ -9,25 +9,30 @@ In this tutorial you will deploy Ed-Fi. This includes:
 
 Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be segmented by school year, but all accessible via the API. Your ODS will be PostgreSQL v11.
 
+This tutorial focuses on the steps necessary to deploy Ed-Fi in Google Cloud. If you find yourself curious about specific pieces and wanting to go deeper with understanding Google Cloud, [Qwiklabs](https://www.qwiklabs.com/) and [Coursera](https://www.coursera.org/professional-certificates/gcp-data-engineering) are great resources.
+
 **Prerequisites**: A Cloud Billing account
 
-<walkthrough-tutorial-duration duration="60"></walkthrough-tutorial-duration>
+<walkthrough-tutorial-duration duration="75"></walkthrough-tutorial-duration>
 
 <walkthrough-project-setup billing="true"></walkthrough-project-setup>
 
 If you created a project via the link above, be sure to also select it from the dropdown.
 
-## Configure Cloud Shell
+Click the **Start** button to move to the next step.
+
+## Initial setup
+### Configure Cloud Shell
 
 Run the command below to configure Cloud Shell to use the appropriate Google Cloud project.
+
+Note there are two buttons above the command snippet to make it easier to run the commands in Cloud Shell. The one on the left will copy the command directly into the terminal for you.
 
 ```sh
 gcloud config set project <walkthrough-project-id/>;
 ```
 
-Click the **Start** button to move to the next step.
-
-## Initial setup
+### Enable APIs
 `gcloud` commands will be run in Google Cloud Shell to create various resources in your Google Cloud project. To do so, the Google Cloud APIs below need to be enabled.
 
 <walkthrough-enable-apis apis="sqladmin.googleapis.com,run.googleapis.com,cloudbuild.googleapis.com,compute.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com"></walkthrough-enable-apis>
@@ -121,13 +126,15 @@ After you have set the `postgres` user's password, click the **Next** button.
 You are now going to seed your various PostgreSQL databases with the table structures required by Ed-Fi.
 
 ### Proxy into instance
-Cloud SQL proxy is a command-line tool used to connect to a Cloud SQL instance. This tool creates an encrypted tunnel between your Cloud Shell environment and your Cloud SQL instance allowing you to connect to it and run various commands.
+Cloud SQL Proxy is a command-line tool used to connect to a Cloud SQL instance. This tool creates an encrypted tunnel between your Cloud Shell environment and your Cloud SQL instance allowing you to connect to it and run various commands.
 
-Click <walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button> to open a new terminal. In the new terminal, run the command below to start Cloud SQL proxy.
+Click <walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button> to open a new terminal. In the new terminal, run the command below to start Cloud SQL Proxy.
 
 ```bash
 cloud_sql_proxy -instances=<walkthrough-project-id/>:us-central1:edfi-ods-db=tcp:5432;
 ```
+
+Cloud SQL Proxy will continue running in the background as you proceed to the next step.
 
 Navigate back to the left terminal and run the command below to import the ODS data. You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
 
@@ -135,12 +142,9 @@ Navigate back to the left terminal and run the command below to import the ODS d
 bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
 ```
 
-That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with Ed-Fi's table structure.
+Note: the import process will take 30 minutes to complete.
 
-Your Cloud SQL instance was created with both a private and public ip address. The public IP was needed for the import job you just ran. Before moving on to the next step, disable the public ip by running the command below:
-```sh
-gcloud sql instances patch edfi-ods-db --no-assign-ip;
-```
+That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with Ed-Fi's table structure.
 
 Click the **Next** button.
 
@@ -169,18 +173,21 @@ Run the commands below to create your service account and grant it access to the
 gcloud iam service-accounts create edfi-cloud-run;
 ```
 
+Grant the service acccount permission to connect to Cloud SQL
 ```sh
 gcloud projects add-iam-policy-binding <walkthrough-project-id/> \
     --member="serviceAccount:edfi-cloud-run@<walkthrough-project-id/>.iam.gserviceaccount.com" \
     --role=roles/cloudsql.client;
 ```
 
+Grant the service acccount permission to access your `ods-password` secret
 ```sh
 gcloud beta secrets add-iam-policy-binding projects/<walkthrough-project-id/>/secrets/ods-password \
 --member serviceAccount:edfi-cloud-run@<walkthrough-project-id/>.iam.gserviceaccount.com \
 --role roles/secretmanager.secretAccessor;
 ```
 
+Grant the service acccount permission to access your `admin-app-encryption-key` secret
 ```sh
 gcloud beta secrets add-iam-policy-binding projects/<walkthrough-project-id/>/secrets/admin-app-encryption-key \
 --member serviceAccount:edfi-cloud-run@<walkthrough-project-id/>.iam.gserviceaccount.com \

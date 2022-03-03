@@ -1,5 +1,9 @@
 ## Deploying Ed-Fi on Google Cloud
-This repository contains all code and instructions to deploy the Ed-Fi Platform to Google Cloud. The button below will walk you through how to deploy the Ed-Fi ODS on Google Cloud SQL as well as the Ed-Fi API and Admin App on Google Cloud Run.
+Clicking on *Open in Cloud Shell* will launch the tutorial pictured below. This tutorial will deploy Ed-Fi. This includes:
+
+* Ed-Fi API and ODS Suite 3 v5.3
+* Ed-Fi Admin App v2.3.2
+* TPDM Core v1.1.1
 
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com?cloudshell_git_repo=https://github.com/K12-Analytics-Engineering/edfi.git&cloudshell_tutorial=tutorial.md)
 
