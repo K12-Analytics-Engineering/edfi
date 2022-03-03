@@ -15,6 +15,8 @@ This tutorial focuses on the steps necessary to deploy Ed-Fi in Google Cloud. If
 
 <walkthrough-tutorial-duration duration="75"></walkthrough-tutorial-duration>
 
+## Google Cloud project
+
 <walkthrough-project-setup billing="true"></walkthrough-project-setup>
 
 If you created a project via the link above, be sure to also select it from the dropdown.
