@@ -138,7 +138,7 @@ Your Ed-Fi API and Admin App will need to access two pieces of sensitive informa
 ### Ed-Fi ODS password
 Run the command below. You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
 ```sh
-echo -n "<POSTGRES_PASSWORD>" | gcloud secrets create ods-password --data-file=-
+echo -n '<POSTGRES_PASSWORD>' | gcloud secrets create ods-password --data-file=-
 ```
 
 ### Admin App encryption key
