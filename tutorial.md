@@ -39,7 +39,9 @@ gcloud config set project <walkthrough-project-id/>;
 
 <walkthrough-enable-apis apis="sqladmin.googleapis.com,run.googleapis.com,cloudbuild.googleapis.com,compute.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com"></walkthrough-enable-apis>
 
-Run the command below. This will download the various files needed from Ed-Fi.
+
+### Download Ed-FI files
+Run the command below. This will download various Ed-Fi database backups as well as the binaries for the Ed-Fi API and Admin App.
 
 ```sh
 bash edfi-ods/001-init.sh;
