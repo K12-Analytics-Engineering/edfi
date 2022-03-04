@@ -49,30 +49,10 @@ After the command above has finished, click the **Next** button.
 
 
 ## Cloud SQL instance
-Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-Fi ODS.
 
-### Create a private services access connection
-For added security, your Cloud SQL instance will have an internal, private IP address. To do so, you need to create a private services access connection. This connection enables your services to communicate exclusively by using internal IP addresses.
+![Cloud SQL](https://walkthroughs.googleusercontent.com/content/images/cloud_SQL.png)
 
-```sh
-gcloud compute addresses create google-managed-services-default \
-    --global \
-    --purpose=VPC_PEERING \
-    --prefix-length=16 \
-    --description="peering range" \
-    --network=default;
-```
-
-```sh
-gcloud services vpc-peerings connect \
-    --service=servicenetworking.googleapis.com \
-    --ranges=google-managed-services-default \
-    --network=default \
-    --project=<walkthrough-project-id/>;
-```
-
-### Create instance
-Now that you have a private services access connection, you can create your Cloud SQL instance.
+Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-Fi ODS. This SQL intance has 2 vCPUs and 7.5 GB of RAM. If you find your database needs grow over time, you are able to edit the instance later to add more compute and memory. Storage will start at 10 GB and increase automatically as needed.
 
 ```sh
 gcloud beta sql instances create \
@@ -81,7 +61,6 @@ gcloud beta sql instances create \
     --memory 7680MiB \
     --cpu 2 \
     --storage-auto-increase \
-    --network=projects/<walkthrough-project-id/>/global/networks/default \
     --backup-start-time 08:00 edfi-ods-db;
 ```
 
