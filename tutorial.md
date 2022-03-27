@@ -54,7 +54,7 @@ After the command above has finished, click the **Next** button.
 
 ![Cloud SQL](https://walkthroughs.googleusercontent.com/content/images/cloud_SQL.png)
 
-Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-Fi ODS. This SQL intance has 2 vCPUs and 7.5 GB of RAM. If you find your database needs grow over time, you are able to edit the instance later to add more compute and memory. Storage will start at 10 GB and increase automatically as needed.
+Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-Fi ODS. This SQL instance has 2 vCPUs and 7.5 GB of RAM. If you find your database needs grow over time, you are able to edit the instance later to add more compute and memory. Storage will start at 10 GB and increase automatically as needed.
 
 ```sh
 gcloud beta sql instances create \
@@ -120,6 +120,8 @@ cloud_sql_proxy -instances=<walkthrough-project-id/>:us-central1:edfi-ods-db=tcp
 Cloud SQL Proxy will continue running in the background as you proceed to the next step.
 
 Navigate back to the left terminal and run the command below to import the ODS data. You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
+
+<!-- gcloud sql import sql edfi-ods-db gs://public-bucket/EdFi_Ods_2022.sql --database EdFi_Ods_2022 --user postgres -->
 
 ```sh
 bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
