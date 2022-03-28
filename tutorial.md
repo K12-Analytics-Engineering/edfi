@@ -194,10 +194,29 @@ Click the **Next** button.
 
 ![Cloud Run](https://cloud-dot-devsite-v2-prod.appspot.com/walkthroughs/images/run.png)
 
-Time to deploy the API on Google Cloud Run. Running the command below will build a Docker image and push the image to your Google Cloud Container Registry. After that, a Cloud Run service will be deployed using that new image.
+Time to deploy the API on Google Cloud Run. Running the command below will build a Docker image and push the image to your Google Cloud Container Registry.
 
 ```sh
-bash edfi-api/001-deploy-api.sh <walkthrough-project-id/>;
+gcloud builds submit --tag gcr.io/<walkthrough-project-id/>/edfi-api edfi-api/;
+```
+
+Now that you have an image in your Google Cloud project, you can deploy a Cloud Run service that uses that image to deploy an application. The command below will deploy an Ed-Fi API where each container instance has 2 vCPUs and 2 GB of memory. The Cloud Run service will scale to zero and scale up to a maximum of 3 instances. By default a Cloud Run service can scale up to 100 containers. We do not want that because our Cloud SQL instance can only have a specific number of concurrent connections. See more on [YouTube](https://www.youtube.com/watch?v=K2cn40Jyxqg) to understand right-sizing your Ed-Fi API and ODS.
+
+```sh
+gcloud beta run deploy edfi-api \
+    --image gcr.io/<walkthrough-project-id/>/edfi-api \
+    --add-cloudsql-instances <walkthrough-project-id/>:us-central1:edfi-ods-db \
+    --port 80 \
+    --region us-central1 \
+    --cpu 2 \
+    --memory 2Gi \
+    --allow-unauthenticated \
+    --update-env-vars PROJECT_ID=<walkthrough-project-id/> \
+    --set-secrets=DB_PASS=ods-password:1 \
+    --service-account edfi-cloud-run@<walkthrough-project-id/>.iam.gserviceaccount.com \
+    --min-instances 0 \
+    --max-instances 3 \
+    --platform managed;
 ```
 
 Click the button below and navigate to Cloud Run.
