@@ -54,7 +54,7 @@ After the command above has finished, click the **Next** button.
 
 ![Cloud SQL](https://walkthroughs.googleusercontent.com/content/images/cloud_SQL.png)
 
-Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-Fi ODS. This SQL instance has 2 vCPUs and 7.5 GB of RAM. If you find your database needs grow over time, you are able to edit the instance later to add more compute and memory. Storage will start at 10 GB and increase automatically as needed.
+Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-Fi ODS. This SQL instance has 1 vCPUs and 6 GB of RAM and costs around $60/month. If you find your database needs grow over time, you are able to edit the instance later to add more compute and memory. Storage will start at 10 GB and increase automatically as needed.
 
 ```sh
 gcloud beta sql instances create \
@@ -64,6 +64,12 @@ gcloud beta sql instances create \
     --cpu 1 \
     --storage-auto-increase \
     --backup-start-time 08:00 edfi-ods-db;
+```
+
+The instance above supports up to 200 concurrent database connections. This is likely sufficient for a single small to medium size LEA implementing Ed-Fi. As seen in their [documentation](https://cloud.google.com/sql/docs/postgres/quotas#limits), it is the number of vCPUs and memory that determine the maximum number of concurrent connections. Cloud SQL also have a flag that can be set to allow additional connections without increasing compute and memory. This should be used with caution since setting this too high could made your instance unstable. However, Google is fairly conservative with their estimates so go ahead and run the command below to increase the limit just a little.
+
+```sh
+gcloud sql instances patch edfi-ods-db --database-flags max_connections=250;
 ```
 
 Click the button below and navigate to your Cloud SQL instance.
