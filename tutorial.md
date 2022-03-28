@@ -200,7 +200,7 @@ Time to deploy the API on Google Cloud Run. Running the command below will build
 gcloud builds submit --tag gcr.io/<walkthrough-project-id/>/edfi-api edfi-api/;
 ```
 
-Now that you have an image in your Google Cloud project, you can deploy a Cloud Run service that uses that image to deploy an application. The command below will deploy an Ed-Fi API where each container instance has 2 vCPUs and 2 GB of memory. The Cloud Run service will scale to zero and scale up to a maximum of 3 instances. By default a Cloud Run service can scale up to 100 containers. We do not want that because our Cloud SQL instance can only have a specific number of concurrent connections. See more on [YouTube](https://www.youtube.com/watch?v=K2cn40Jyxqg) to understand right-sizing your Ed-Fi API and ODS.
+Now that you have an image in your Google Cloud project, you can deploy a Cloud Run service that uses that image to deploy an application. The command below will deploy an Ed-Fi API where each container instance has 2 vCPUs and 2 GB of memory. The Cloud Run service will scale to zero and scale up to a maximum of 3 instances. By default a Cloud Run service can scale up to 100 containers. We do not want that since our Cloud SQL instance can only have a specific number of concurrent connections. See more on [YouTube](https://www.youtube.com/watch?v=K2cn40Jyxqg) to understand right-sizing your Ed-Fi API and ODS.
 
 ```sh
 gcloud beta run deploy edfi-api \
