@@ -60,8 +60,8 @@ Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-
 gcloud beta sql instances create \
     --zone us-central1-c \
     --database-version POSTGRES_11 \
-    --memory 7680MiB \
-    --cpu 2 \
+    --memory 6144MiB \
+    --cpu 1 \
     --storage-auto-increase \
     --backup-start-time 08:00 edfi-ods-db;
 ```
