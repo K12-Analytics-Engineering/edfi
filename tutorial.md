@@ -194,7 +194,7 @@ Click the **Next** button.
 
 ![Cloud Run](https://cloud-dot-devsite-v2-prod.appspot.com/walkthroughs/images/run.png)
 
-Time to deploy the API on Google Cloud Run. Running the command below will build a Docker image and push the image to your Google Cloud Container Registry.
+Time to deploy the Ed-Fi API via Google Cloud Run. Run the command below to build a Docker image and push the image to your Google Cloud Container Registry.
 
 ```sh
 gcloud builds submit --tag gcr.io/<walkthrough-project-id/>/edfi-api edfi-api/;
@@ -231,10 +231,29 @@ Click the **Next** button.
 
 ![Cloud Run](https://cloud-dot-devsite-v2-prod.appspot.com/walkthroughs/images/run.png)
 
-The final step is to deploy Ed-Fi's Admin App as an additional Google Cloud Run service. Run the command below replacing *`<CLOUD_RUN_EDFI_API_URL>`* with the Ed-Fi API generated via the previous step.
+The final step is to deploy Ed-Fi's Admin App via Google Cloud Run. Run the command below to build a Docker image and push the image to your Google Cloud Container Registry.
 
 ```sh
-bash edfi-admin-app/001-deploy-admin-app.sh <walkthrough-project-id/> <CLOUD_RUN_EDFI_API_URL>;
+gcloud builds submit --tag gcr.io/<walkthrough-project-id/>/edfi-admin-app edfi-admin-app/;
+```
+
+```sh
+gcloud beta run deploy edfi-admin-app \
+    --image gcr.io/<walkthrough-project-id/>/edfi-admin-app \
+    --add-cloudsql-instances <walkthrough-project-id/>:us-central1:edfi-ods-db \
+    --port 80 \
+    --region us-central1 \
+    --cpu 2 \
+    --memory 1Gi \
+    --concurrency 50 \
+    --min-instances 0 \
+    --max-instances 1 \
+    --allow-unauthenticated \
+    --update-env-vars PROJECT_ID=<walkthrough-project-id/>,API_URL=$(gcloud beta run services describe edfi-api --region us-central1 --format="get(status.url)") \
+    --set-secrets=DB_PASS=ods-password:1,ENCRYPTION_KEY=admin-app-encryption-key:1 \
+    --service-account edfi-cloud-run@<walkthrough-project-id/>.iam.gserviceaccount.com \
+    --platform managed;
+
 ```
 
 After the Cloud Run service has been deployed, the terminal will print out a *Service URL* for your Admin App deployment. Navigate to the URL to create an admin account.
