@@ -237,6 +237,8 @@ The final step is to deploy Ed-Fi's Admin App via Google Cloud Run. Run the comm
 gcloud builds submit --tag gcr.io/<walkthrough-project-id/>/edfi-admin-app edfi-admin-app/;
 ```
 
+Now that you have an image in your Google Cloud project, you can deploy a Cloud Run service that uses that image to deploy an application. The command below will deploy an Ed-Fi API where each container instance has 2 vCPUs and 1 GB of memory. The Cloud Run service will scale to zero and scale up to a maximum of just 1 instance.
+
 ```sh
 gcloud beta run deploy edfi-admin-app \
     --image gcr.io/<walkthrough-project-id/>/edfi-admin-app \
