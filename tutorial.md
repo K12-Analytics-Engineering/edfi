@@ -63,13 +63,9 @@ gcloud beta sql instances create \
     --memory 6144MiB \
     --cpu 1 \
     --storage-auto-increase \
+    --database-flags max_connections=250 \
+    --require-ssl \
     --backup-start-time 08:00 edfi-ods-db;
-```
-
-The instance above supports up to 200 concurrent database connections. This is likely sufficient for a single small to medium size LEA implementing Ed-Fi. As seen in their [documentation](https://cloud.google.com/sql/docs/postgres/quotas#limits), it is the number of vCPUs and memory that determine the maximum number of concurrent connections. Cloud SQL also have a flag that can be set to allow additional connections without increasing compute and memory. This should be used with caution since setting this too high could made your instance unstable. However, Google is fairly conservative with their estimates so go ahead and run the command below to increase the limit just a little.
-
-```sh
-gcloud sql instances patch edfi-ods-db --database-flags max_connections=250;
 ```
 
 Click the button below and navigate to your Cloud SQL instance.
