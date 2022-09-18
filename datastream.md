@@ -9,5 +9,5 @@ GRANT USAGE ON SCHEMA edfi TO replication_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA edfi GRANT SELECT ON TABLES TO replication_user;
 
 CREATE PUBLICATION edfi FOR ALL TABLES;
-SELECT PG_CREATE_LOGICAL_REPLICATION_SLOT('edfi_ods_2023', 'PGOUTPUT');
+SELECT pg_create_logical_replication_slot('edfi_ods_2023', 'pgoutput');
 ```
