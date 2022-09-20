@@ -39,15 +39,7 @@ gcloud config set project <walkthrough-project-id/>;
 
 <walkthrough-enable-apis apis="sqladmin.googleapis.com,run.googleapis.com,cloudbuild.googleapis.com,compute.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com"></walkthrough-enable-apis>
 
-
-### Download Ed-FI files
-Run the command below. This will download various Ed-Fi database backups as well as the binaries for the Ed-Fi API and Admin App.
-
-```sh
-bash edfi-ods/001-init.sh;
-```
-
-After the command above has finished, click the **Next** button.
+After all APIs show a green check mark, click the **Next** button.
 
 
 ## Cloud SQL instance
@@ -74,27 +66,73 @@ Click the button below and navigate to your Cloud SQL instance.
 
 Your Cloud SQL instance has finished being created when you see a green check mark next to it.
 
-### Create databases
-After your Cloud SQL instance has been created, time to create the necessary databases.
+### Admin and Security databases
+Now that your Cloud SQL instance has been created, time to create the necessary databases.
 
+The commands below will create your `EdFi_Admin` and `EdFi_Security` databases from database backup files.
+
+`EdFi_Admin`
 ```sh
 gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db;
 ```
+```sh
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_admin_db_5.3.153.sql \
+    --database 'EdFi_Admin' \
+    --user postgres;
+```
 
+`EdFi_Security`
 ```sh
 gcloud sql databases create 'EdFi_Security' --instance=edfi-ods-db;
+
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_security_db_5.3.152.sql \
+    --database 'EdFi_Security' \
+    --user postgres;
 ```
+
+### Minimal or Populated
+
+Below are commands for creating the ODS databases from the Ed-Fi Alliance's minimal and populated templates. Use the minimal templates if you want an empty ODS to load your district's data into. Use the populated template if you'd like an ODS populated with fake student data.
+
+**Minimal**
+
+`EdFi_Ods_2023`
+```sh
+gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db;
+```
+```sh
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_5.3.77.sql \
+    --database 'EdFi_Ods_2023' \
+    --user postgres;
+```
+`EdFi_Ods_2022`
+```sh
+gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db;
+```
+```sh
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_5.3.77.sql \
+    --database 'EdFi_Ods_2022' \
+    --user postgres;
+```
+`EdFi_Ods_2021`
+```sh
+gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db;
+```
+```sh
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_5.3.77.sql \
+    --database 'EdFi_Ods_2021' \
+    --user postgres;
+```
+
+**Populated**
 
 ```sh
 gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db;
 ```
-
 ```sh
-gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db;
-```
-
-```sh
-gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db;
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_populated_tpdm_core_5.3.224.sql \
+    --database 'EdFi_Ods_2023' \
+    --user postgres;
 ```
 
 ### Set your postgres user password
@@ -105,35 +143,6 @@ Now that your Cloud SQL instance has been created, you will need to set the pass
 * Click on the three-dot menu and set the password for the *postgres* user
 
 After you have set the `postgres` user's password, click the **Next** button.
-
-
-## Import ODS data
-You are now going to seed your various PostgreSQL databases with the table structures required by Ed-Fi.
-
-### Proxy into instance
-Cloud SQL Proxy is a command-line tool used to connect to a Cloud SQL instance. This tool creates an encrypted tunnel between your Cloud Shell environment and your Cloud SQL instance allowing you to connect to it and run various commands.
-
-Click <walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button> to open a new terminal. In the new terminal, run the command below to start Cloud SQL Proxy.
-
-```bash
-cloud_sql_proxy -instances=<walkthrough-project-id/>:us-central1:edfi-ods-db=tcp:5432;
-```
-
-Cloud SQL Proxy will continue running in the background as you proceed to the next step.
-
-Navigate back to the left terminal and run the command below to import the ODS data. You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
-
-<!-- gcloud sql import sql edfi-ods-db gs://public-bucket/EdFi_Ods_2022.sql --database EdFi_Ods_2022 --user postgres -->
-
-```sh
-bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
-```
-
-Note: the import process will take 30 minutes to complete.
-
-That's it for the ODS! You now have an Ed-Fi ODS created and your databases seeded with Ed-Fi's table structure.
-
-Click the **Next** button.
 
 
 ## Create your Secrets
@@ -215,15 +224,38 @@ gcloud beta run deploy edfi-api \
     --platform managed;
 ```
 
-Click the button below and navigate to Cloud Run.
-
-<walkthrough-menu-navigation sectionId="CLOUD_RUN_SECTION"></walkthrough-menu-navigation>
-
-Your Cloud Run service has finished being created when you see a green check mark next to it. Click on **edfi-api** and navigate to the URL generated by Cloud Run. This is your Ed-Fi API URL.
+Your Cloud Run service has finished being created when you see a service URL logged to Cloud Shell. Navigate to the URL to see metadata related to your Ed-Fi API.
 
 Click the **Next** button.
 
-## Ed-Fi Admin App
+## Ed-Fi Admin App Pt. I
+Before we can deploy the Admin App to Cloud Run. We need to import the Admin App database tables.
+
+Run the command below to download the backup files.
+```sh
+bash edfi-ods/001-init.sh;
+```
+
+### Proxy into instance
+Cloud SQL Proxy is a command-line tool used to connect to a Cloud SQL instance. This tool creates an encrypted tunnel between your Cloud Shell environment and your Cloud SQL instance allowing you to connect to it and run various commands.
+
+Click <walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button> to open a new terminal. In the new terminal, run the command below to start Cloud SQL Proxy.
+
+```bash
+cloud_sql_proxy -instances=<walkthrough-project-id/>:us-central1:edfi-ods-db=tcp:5432;
+```
+
+Cloud SQL Proxy will continue running in the background as you proceed to the next step.
+
+Navigate back to the left terminal and run the command below to import Admin App tables. You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
+
+```sh
+bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
+```
+
+Click the **Next** button.
+
+## Ed-Fi Admin App Pt. II
 
 ![Cloud Run](https://cloud-dot-devsite-v2-prod.appspot.com/walkthroughs/images/run.png)
 
