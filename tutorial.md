@@ -3,11 +3,11 @@
 ![Ed-Fi](https://www.ed-fi.org/assets/2019/07/Ed-FiLogo-2.png)
 
 In this tutorial you will deploy Ed-Fi. This includes:
-* Ed-Fi API and ODS Suite 3 v5.3
-* Ed-Fi Admin App v2.3.2
-* TPDM Core v1.1.1
+* Ed-Fi API and ODS Suite 3 v6.1
+* Ed-Fi Admin App v3
+* TPDM Core v1.1.0
 
-Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be segmented by school year, but all accessible via the API. Your ODS will be PostgreSQL v11.
+Your Ed-Fi API will run in `YearSpecific` mode allowing for your ODSes to be segmented by school year, but all accessible via the API. Your ODS will be PostgreSQL v13.
 
 This tutorial focuses on the steps necessary to deploy Ed-Fi in Google Cloud. If you find yourself curious about specific pieces and wanting to go deeper with understanding Google Cloud, [Qwiklabs](https://www.qwiklabs.com/) and [Coursera](https://www.coursera.org/professional-certificates/gcp-data-engineering) are great resources.
 
@@ -51,7 +51,7 @@ Next up you will create a PostgreSQL Cloud SQL instance that will house your Ed-
 ```sh
 gcloud beta sql instances create \
     --zone us-central1-c \
-    --database-version POSTGRES_11 \
+    --database-version POSTGRES_13 \
     --memory 6144MiB \
     --cpu 1 \
     --storage-auto-increase \
@@ -76,7 +76,7 @@ The commands below will create your `EdFi_Admin` and `EdFi_Security` databases f
 gcloud sql databases create 'EdFi_Admin' --instance=edfi-ods-db;
 ```
 ```sh
-gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_admin_db_5.3.153.sql \
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_admin_db_6.1.45.sql \
     --database 'EdFi_Admin' \
     --user postgres;
 ```
@@ -86,7 +86,7 @@ gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_admin_db_5.3.1
 gcloud sql databases create 'EdFi_Security' --instance=edfi-ods-db;
 ```
 ```sh
-gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_security_db_5.3.152.sql \
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_security_db_6.1.56.sql \
     --database 'EdFi_Security' \
     --user postgres;
 ```
@@ -102,7 +102,7 @@ Below are commands for creating the ODS databases from the Ed-Fi Alliance's mini
 gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db;
 ```
 ```sh
-gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_5.3.77.sql \
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_6.1.135.sql \
     --database 'EdFi_Ods_2023' \
     --user postgres;
 ```
@@ -111,7 +111,7 @@ gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_c
 gcloud sql databases create 'EdFi_Ods_2022' --instance=edfi-ods-db;
 ```
 ```sh
-gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_5.3.77.sql \
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_6.1.135.sql \
     --database 'EdFi_Ods_2022' \
     --user postgres;
 ```
@@ -120,7 +120,7 @@ gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_c
 gcloud sql databases create 'EdFi_Ods_2021' --instance=edfi-ods-db;
 ```
 ```sh
-gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_5.3.77.sql \
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_6.1.135.sql \
     --database 'EdFi_Ods_2021' \
     --user postgres;
 ```
