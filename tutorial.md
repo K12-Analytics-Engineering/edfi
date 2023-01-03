@@ -212,7 +212,7 @@ Now that you have an image in your Google Cloud project, you can deploy a Cloud 
 
 ```sh
 gcloud beta run deploy edfi-api \
-    --image gcr.io/<walkthrough-project-id/>/edfi-api \
+    --image us-central1-docker.pkg.dev/<walkthrough-project-id/>/edfi/edfi-api \
     --add-cloudsql-instances <walkthrough-project-id/>:us-central1:edfi-ods-db \
     --port 80 \
     --region us-central1 \
@@ -272,7 +272,7 @@ Now that you have an image in your Google Cloud project, you can deploy a Cloud 
 
 ```sh
 gcloud beta run deploy edfi-admin-app \
-    --image gcr.io/<walkthrough-project-id/>/edfi-admin-app \
+    --image us-central1-docker.pkg.dev/<walkthrough-project-id/>/edfi/edfi-admin-app \
     --add-cloudsql-instances <walkthrough-project-id/>:us-central1:edfi-ods-db \
     --port 80 \
     --region us-central1 \
