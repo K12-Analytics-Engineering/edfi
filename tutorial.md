@@ -37,7 +37,7 @@ gcloud config set project <walkthrough-project-id/>;
 ### Enable APIs
 `gcloud` commands will be run in Google Cloud Shell to create various resources in your Google Cloud project. To do so, the Google Cloud APIs below need to be enabled.
 
-<walkthrough-enable-apis apis="sqladmin.googleapis.com,run.googleapis.com,cloudbuild.googleapis.com,compute.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com"></walkthrough-enable-apis>
+<walkthrough-enable-apis apis="sqladmin.googleapis.com,run.googleapis.com,cloudbuild.googleapis.com,compute.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com,artifactregistry.googleapis.com"></walkthrough-enable-apis>
 
 After all APIs show a green check mark, click the **Next** button.
 
@@ -97,6 +97,15 @@ Below are commands for creating the ODS databases from the Ed-Fi Alliance's mini
 
 **Minimal**
 
+`EdFi_Ods_2024`
+```sh
+gcloud sql databases create 'EdFi_Ods_2024' --instance=edfi-ods-db;
+```
+```sh
+gcloud sql import sql edfi-ods-db gs://edfi-public-resources/edfi_minimal_tpdm_core_6.1.135.sql \
+    --database 'EdFi_Ods_2024' \
+    --user postgres;
+```
 `EdFi_Ods_2023`
 ```sh
 gcloud sql databases create 'EdFi_Ods_2023' --instance=edfi-ods-db;
@@ -202,7 +211,11 @@ Click the **Next** button.
 
 Time to deploy the Ed-Fi API via Google Cloud Run. Run the command below to build a Docker image and push the image to your Google Cloud Container Registry.
 
-# TODO CREATE REGISTRY
+```sh
+gcloud artifacts repositories create edfi \
+    --repository-format=docker \
+    --location=us-central1;
+```
 
 ```sh
 gcloud builds submit --tag us-central1-docker.pkg.dev/<walkthrough-project-id/>/edfi/edfi-api edfi-api/;
@@ -219,7 +232,7 @@ gcloud beta run deploy edfi-api \
     --cpu 2 \
     --memory 2Gi \
     --allow-unauthenticated \
-    --update-env-vars PROJECT_ID=<walkthrough-project-id/> \
+    --update-env-vars DB_HOST=<walkthrough-project-id/>:us-central1:edfi-ods-db \
     --set-secrets=DB_PASS=ods-password:1 \
     --service-account edfi-cloud-run@<walkthrough-project-id/>.iam.gserviceaccount.com \
     --min-instances 0 \
@@ -231,34 +244,7 @@ Your Cloud Run service has finished being created when you see a service URL log
 
 Click the **Next** button.
 
-## Ed-Fi Admin App Pt. I
-Before we can deploy the Admin App to Cloud Run. We need to import the Admin App database tables.
-
-Run the command below to download the backup files.
-```sh
-bash edfi-ods/001-init.sh;
-```
-
-### Proxy into instance
-Cloud SQL Proxy is a command-line tool used to connect to a Cloud SQL instance. This tool creates an encrypted tunnel between your Cloud Shell environment and your Cloud SQL instance allowing you to connect to it and run various commands.
-
-Click <walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button> to open a new terminal. In the new terminal, run the command below to start Cloud SQL Proxy.
-
-```bash
-cloud_sql_proxy -instances=<walkthrough-project-id/>:us-central1:edfi-ods-db=tcp:5432;
-```
-
-Cloud SQL Proxy will continue running in the background as you proceed to the next step.
-
-Navigate back to the left terminal and run the command below to import Admin App tables. You should replace *`<POSTGRES_PASSWORD>`* with your actual `postgres` user password.
-
-```sh
-bash edfi-ods/003-import-ods-data.sh '<POSTGRES_PASSWORD>';
-```
-
-Click the **Next** button.
-
-## Ed-Fi Admin App Pt. II
+## Ed-Fi Admin App
 
 ![Cloud Run](https://cloud-dot-devsite-v2-prod.appspot.com/walkthroughs/images/run.png)
 
